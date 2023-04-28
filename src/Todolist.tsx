@@ -9,7 +9,19 @@ export type TaskPropsType = {
 export type TodoPropsType = {
     title: string
     tasks: TaskPropsType[]
+    removeTask: (id: number) => void
+    changeFilter: (filter: FilterType) => void
 }
+
+export type FilterType = 'all' | 'active' | 'completed'
+
+
+
+
+
+
+
+
 
 
 export const Todolist = (props: TodoPropsType): any => {
@@ -26,15 +38,16 @@ export const Todolist = (props: TodoPropsType): any => {
                             <li>
                                 <input type={'checkbox'} checked={t.isDone}/>
                                 <span>{t.title}</span>
+                                <button onClick={()=>props.removeTask(t.id)}>X</button>
                             </li>
                         )
                     }
                 )}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => props.changeFilter('all')}>All</button>
+                <button onClick={() => props.changeFilter('active')}>Active</button>
+                <button onClick={() => props.changeFilter('completed')}>Completed</button>
             </div>
         </div>
     )
