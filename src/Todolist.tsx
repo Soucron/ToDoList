@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {Button} from './Button';
 
 export type TaskPropsType = {
     id: string,
@@ -26,11 +27,11 @@ export const Todolist = (props: TodoPropsType) => {
         setTitle('')
     }
 
-    const changeFilterHandler = (filter:FilterType) => {
+    const changeFilterHandler = (filter: FilterType) => {
         props.changeFilter(filter)
     }
 
-    const removeTaskHandler =(id:string) => {
+    const removeTaskHandler = (id: string) => {
         props.removeTask(id)
     }
 
@@ -48,30 +49,30 @@ export const Todolist = (props: TodoPropsType) => {
                         }
                     }}
                 />
-                <button onClick={addTaskHandler}>+</button>
-            </div>
-            <ul>
-                {props.tasks.map(t => {
-
-                    // const removeTaskHandler =() => {
-                    //     props.removeTask(t.id)
-                    // }
-
-                        return (
-                            <li>
-                                <input type={'checkbox'} checked={t.isDone}/>
-                                <span>{t.title}</span>
-                                <button onClick={()=>removeTaskHandler(t.id)}>X</button>
-                            </li>
-                        )
-                    }
-                )}
-            </ul>
-            <div>
-                <button onClick={()=> changeFilterHandler('all')}>All</button>
-                <button onClick={()=> changeFilterHandler('active')}>Active</button>
-                <button onClick={()=> changeFilterHandler('completed')}>Completed</button>
-            </div>
+                <Button callback={addTaskHandler} name={'+'}/>
         </div>
-    )
+    <ul>
+        {props.tasks.map(t => {
+
+                // const removeTaskHandler =() => {
+                //     props.removeTask(t.id)
+                // }
+
+                return (
+                    <li>
+                        <input type={'checkbox'} checked={t.isDone}/>
+                        <span>{t.title}</span>
+                        <Button callback={() => removeTaskHandler(t.id)} name={'X'}/>
+                    </li>
+                )
+            }
+        )}
+    </ul>
+    <div>
+        <Button callback={() => changeFilterHandler('all')} name={'All'}/>
+        <Button callback={() => changeFilterHandler('active')} name={'Active'}/>
+        <Button callback={() => changeFilterHandler('completed')} name={'Completed'}/>
+    </div>
+</div>
+)
 }
