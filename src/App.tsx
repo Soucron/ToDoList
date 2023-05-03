@@ -11,7 +11,7 @@ function App() {
         {id: v1(), title: 'JS', isDone: true},
         {id: v1(), title: 'ReactJS', isDone: false}
     ])
-    const [filter, setFilter] = useState<FilterType>('all')
+    const [filter, setFilter] = useState<FilterType>('All')
     const changeFilter = (filter: FilterType) => {
         setFilter(filter)
     }
@@ -21,11 +21,15 @@ function App() {
     }
 
     let fullFilteredTasks = tasks
-       if (filter === 'active') {
+       if (filter === 'Active') {
            fullFilteredTasks = tasks.filter(t => t.isDone === false)
        }
-       if (filter === 'completed') {
+       if (filter === 'Completed') {
            fullFilteredTasks = tasks.filter(t => t.isDone === true)
+       }
+
+       const changeTaskStatus =(id:string, isDone: boolean) => {
+           setTasks(tasks.map(el => el.id === id ? {...el, isDone: isDone} : el ))
        }
 
     const addTask = (title: string) => {
@@ -41,6 +45,8 @@ function App() {
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
+                changeTaskStatus={changeTaskStatus}
+                filter={filter}
             />
         </>
 
