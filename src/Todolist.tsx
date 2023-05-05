@@ -8,12 +8,13 @@ export type TaskPropsType = {
 }
 
 export type TodoPropsType = {
+    todolistId: string
     title: string
     tasks: TaskPropsType[]
-    removeTask: (id: string) => void
-    changeFilter: (filter: FilterType) => void
-    addTask: (title: string) => void
-    changeTaskStatus: (id: string, isDone: boolean) => void
+    removeTask: (todolistId: string, taskId: string) => void
+    changeFilter: (todolistId: string, value: FilterType) => void
+    addTask: (todolistId: string,title: string) => void
+    changeTaskStatus: (todolistId: string , id: string, isDone: boolean) => void
     filter: FilterType
 }
 
@@ -29,19 +30,19 @@ export const Todolist = (props: TodoPropsType) => {
 
     const addTaskHandler = () => {
         if (title.trim() !== '') {
-            props.addTask(title.trim())
+            props.addTask(props.todolistId, title.trim())
             setTitle('')
         } else {
             setError('Title is required')
         }
     }
 
-    const changeFilterHandler = (filter: FilterType) => {
-        props.changeFilter(filter)
+    const changeFilterHandler = (value: FilterType) => {
+        props.changeFilter(props.todolistId, value)
     }
 
-    const removeTaskHandler = (id: string) => {
-        props.removeTask(id)
+    const removeTaskHandler = (todolistId: string, id: string) => {
+        props.removeTask(todolistId, id)
     }
 
 
@@ -73,14 +74,14 @@ export const Todolist = (props: TodoPropsType) => {
 
                         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                             let newIsDoneValue = e.currentTarget.checked;
-                            props.changeTaskStatus(t.id, newIsDoneValue)
+                            props.changeTaskStatus(props.todolistId , t.id, newIsDoneValue)
                         }
 
                         return (
                             <li key={t.id} className={t.isDone ? 'is-done' : ''}>
                                 <input type={'checkbox'} checked={t.isDone} onChange={onChangeHandler}/>
                                 <span>{t.title}</span>
-                                <Button callback={() => removeTaskHandler(t.id)} name={'X'}/>
+                                <Button callback={() => removeTaskHandler(props.todolistId , t.id)} name={'X'}/>
                             </li>
                         )
                     }
