@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {FilterType, TaskPropsType, Todolist} from './Todolist';
 import {v1} from 'uuid';
+import AddItemForm from './Components/AddItemForm';
 
 
 type  TodoListsType = { id: string, title: string, filter: FilterType }
@@ -42,20 +43,20 @@ function App() {
     }
 
     const removeTask = (todolistId: string, taskId: string) => {
-        setTasks({...tasks, [todolistId] : tasks[todolistId].filter(el => el.id !== taskId ) })
+        setTasks({...tasks, [todolistId]: tasks[todolistId].filter(el => el.id !== taskId)})
         // const fiteredTasks = tasks.filter(t => t.id !== id);
         // setTasks(fiteredTasks)
     }
 
 
-    const changeTaskStatus = (todolistId: string , taskId: string, isDone: boolean) => {
-        setTasks( {...tasks, [todolistId] : tasks[todolistId].map(el => el.id === taskId ? {...el, isDone: isDone} : el)})
+    const changeTaskStatus = (todolistId: string, taskId: string, isDone: boolean) => {
+        setTasks({...tasks, [todolistId]: tasks[todolistId].map(el => el.id === taskId ? {...el, isDone: isDone} : el)})
         // setTasks(tasks.map(el => el.id === id ? {...el, isDone: isDone} : el))
     }
 
     const addTask = (todolistId: string, title: string) => {
         let newTask = {id: v1(), title: title, isDone: false}
-        setTasks({...tasks,[todolistId]: [...tasks[todolistId], newTask] })
+        setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId]]})
 
         // let newTasks = [task, ...tasks]
         // setTasks(newTasks)
@@ -66,8 +67,18 @@ function App() {
         delete tasks[todolistId]
     }
 
+    const addTodolist = (newTitle: string) => {
+        const newTodolistId = v1();
+        const newTodolist: TodoListsType = {id: newTodolistId, title: newTitle, filter: 'All'}
+        setTodolists([newTodolist, ...todolists])
+        setTasks({...tasks,[newTodolistId]:[]})
+
+
+    }
+
 
     return (<>
+            <AddItemForm callback={addTodolist}/>
             {todolists.map(el => {
                 let fullFilteredTasks = tasks[el.id]
                 if (el.filter === 'Active') {

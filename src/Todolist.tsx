@@ -1,5 +1,6 @@
 import React, {ChangeEvent, KeyboardEventHandler, useState} from 'react';
 import {Button} from './Components/Button';
+import AddItemForm from './Components/AddItemForm';
 
 export type TaskPropsType = {
     id: string,
@@ -24,30 +25,31 @@ export type FilterType = 'All' | 'Active' | 'Completed'
 
 export const Todolist = (props: TodoPropsType) => {
 
-    const [title, setTitle] = useState('')
-    const [eror, setError] = useState<string | null>(null)
+    // const [title, setTitle] = useState('')
+    // const [error, setError] = useState<string | null>(null)
 
 
-    const addTaskHandler = () => {
-        if (title.trim() !== '') {
-            props.addTask(props.todolistId, title.trim())
-            setTitle('')
-        } else {
-            setError('Title is required')
-        }
-    }
+    // const addTaskHandler = () => {
+    //     if (title.trim() !== '') {
+    //         props.addTask(props.todolistId, title.trim())
+    //         setTitle('')
+    //     } else {
+    //         setError('Title is required')
+    //     }
+    // }
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
-    }
+    // const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    //     setTitle(e.currentTarget.value)
+    // }
 
-    const onKeyPressHandler: React.KeyboardEventHandler = (e ) => {
-        setError(null)
-        if (e.key === 'Enter') {
-            addTaskHandler()
-        }
+    // const onKeyPressHandler: React.KeyboardEventHandler = (e ) => {
+    //     setError(null)
+    //     if (e.key === 'Enter') {
+    //         addTaskHandler()
+    //     }
+    //
+    // }
 
-    }
 
     const removeTaskHandler = (todolistId: string, id: string) => {
         props.removeTask(todolistId, id)
@@ -62,6 +64,11 @@ export const Todolist = (props: TodoPropsType) => {
         props.changeFilter(props.todolistId, value)
     }
 
+    const addTaskHandler = (newTitle: string) => {
+      props.addTask(props.todolistId, newTitle)
+    }
+
+
 
 
 
@@ -73,14 +80,16 @@ export const Todolist = (props: TodoPropsType) => {
             </h3>
 
             <div>
-                <input
-                    value={title}
-                    onChange={onChangeHandler}
-                    onKeyUp={onKeyPressHandler}
-                    className={eror ? 'error' : ''}
-                />
-                <button onClick={() => addTaskHandler()}>+</button>
-                {eror && <div className="error-message">{eror}</div>}
+                <AddItemForm  callback={addTaskHandler}/>
+
+                {/*<input*/}
+                {/*    value={title}*/}
+                {/*    onChange={onChangeHandler}*/}
+                {/*    onKeyUp={onKeyPressHandler}*/}
+                {/*    className={eror ? 'error' : ''}*/}
+                {/*/>*/}
+                {/*<button onClick={() => addTaskHandler()}>+</button>*/}
+                {/*{eror && <div className="error-message">{eror}</div>}*/}
             </div>
 
 
