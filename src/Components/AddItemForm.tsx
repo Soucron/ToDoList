@@ -2,7 +2,7 @@ import React, {ChangeEvent, KeyboardEventHandler, useState} from 'react';
 import {v1} from 'uuid';
 
 type AddItemFormPropsType = {
-    callback : (title: string) => void,
+    callBack : (title: string) => void,
 }
 
 const AddItemForm = (props: AddItemFormPropsType) => {
@@ -13,7 +13,7 @@ const AddItemForm = (props: AddItemFormPropsType) => {
     const addItem = () => {
         let newTitle = title.trim();
         if (title.trim() !== '') {
-            props.callback(newTitle)
+            props.callBack(newTitle)
             setTitle('')
         } else {
             setError('Title is required')

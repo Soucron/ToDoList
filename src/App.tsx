@@ -62,6 +62,10 @@ function App() {
         // setTasks(newTasks)
     }
 
+    const updateTask = (todolistId: string, taskId: string, updateTitle: string) => {
+        setTasks({...tasks,[todolistId]: tasks[todolistId].map(el=> el.id === taskId ? {...el, title : updateTitle} : el)})
+    }
+
     const removeTodolist = (todolistId: string) => {
         setTodolists(todolists.filter(el => el.id !== todolistId))
         delete tasks[todolistId]
@@ -72,13 +76,19 @@ function App() {
         const newTodolist: TodoListsType = {id: newTodolistId, title: newTitle, filter: 'All'}
         setTodolists([newTodolist, ...todolists])
         setTasks({...tasks,[newTodolistId]:[]})
+    }
 
-
+    const updateTodolistTitle = (todolistId: string, updateTitle: string) => {
+        setTodolists(todolists.map(el => el.id === todolistId ? {...el, title:updateTitle}: el))
     }
 
 
+
+
+
+
     return (<>
-            <AddItemForm callback={addTodolist}/>
+            <AddItemForm callBack={addTodolist}/>
             {todolists.map(el => {
                 let fullFilteredTasks = tasks[el.id]
                 if (el.filter === 'Active') {
@@ -99,6 +109,8 @@ function App() {
                     changeTaskStatus={changeTaskStatus}
                     filter={el.filter}
                     removeTodolist={removeTodolist}
+                    updateTask={updateTask}
+                    updateTodolistTitle={updateTodolistTitle}
                 />
             })}
         </>
