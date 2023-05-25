@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
 type AddItemFormPropsType = {
-    callBack: (title: string) => void,
+    callBack: ( title: string) => void,
 }
 
 const AddItemForm = (props: AddItemFormPropsType) => {
