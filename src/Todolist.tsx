@@ -1,10 +1,10 @@
-import React, {ChangeEvent, KeyboardEventHandler, useState} from 'react';
+import React, {ChangeEvent} from 'react';
 import AddItemForm from './Components/AddItemForm';
 import {EditableSpan} from './Components/EditableSpan';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete'
 import IconButton from '@mui/material/IconButton';
-import Checkbox from '@mui/material/Checkbox';
+import {SuperCheckBox} from './Components/SuperCheckBox';
 
 
 export type TaskPropsType = {
@@ -87,10 +87,12 @@ export const Todolist = (props: TodoPropsType) => {
     return (
         <div>
             <h3>
-                <EditableSpan oldTitle={props.title} callBack={updateTodolistTitleHandler}/>
+                <EditableSpan oldTitle={props.title}
+                              callBack={updateTodolistTitleHandler}/>
 
 
-                <IconButton aria-label="delete" onClick={() => removeTodolistHandler(props.todolistId)}>
+                <IconButton aria-label="delete"
+                            onClick={() => removeTodolistHandler(props.todolistId)}>
                     <DeleteIcon/>
                 </IconButton>
             </h3>
@@ -123,7 +125,7 @@ export const Todolist = (props: TodoPropsType) => {
 
                         return (
                             <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-                                <Checkbox checked={t.isDone} onChange={onChangeHandler}/>
+                                <SuperCheckBox isDone={t.isDone} onChangeHandler={onChangeHandler}/>
                                 <EditableSpan oldTitle={t.title}
                                               callBack={(updateTitle) => updateTaskHandler(t.id, updateTitle)}/>
                                 <IconButton aria-label="delete" onClick={() => removeTaskHandler(props.todolistId, t.id)}>

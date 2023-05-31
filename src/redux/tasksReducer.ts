@@ -1,4 +1,4 @@
-import {FilterType, TaskPropsType} from '../Todolist';
+
 import {v1} from 'uuid';
 import {TodoListTaskType} from '../App';
 
