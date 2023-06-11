@@ -110,6 +110,7 @@ function App() {
 
     const removeTodolist = (todolistId: string) => {
         todolistDispatch(removeTodolistAC(todolistId))
+        delete tasks[todolistId]
 
         // setTodolists(todolists.filter(el => el.id !== todolistId))
         // delete tasks[todolistId]
