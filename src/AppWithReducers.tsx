@@ -1,6 +1,6 @@
 import React, {useReducer} from 'react';
 import './App.css';
-import {FilterType, TaskPropsType, Todolist} from './Todolist';
+import {FilterType, Todolist} from './Todolist';
 import {v1} from 'uuid';
 import AddItemForm from './Components/AddItemForm';
 import ButtonAppBar from './Components/ButtonAppBar';
@@ -24,9 +24,6 @@ import {
 
 
 export type  TodoListsType = { id: string, title: string, filter: FilterType }
-export type TodoListTaskType = {
-    [key: string]: TaskPropsType []
-}
 
 
 export function AppWithReducers() {
