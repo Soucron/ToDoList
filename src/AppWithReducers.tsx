@@ -2,7 +2,7 @@ import React, {useReducer} from 'react';
 import './App.css';
 import {FilterType, Todolist} from './Todolist';
 import {v1} from 'uuid';
-import AddItemForm from './Components/AddItemForm';
+import {AddItemForm} from './Components/AddItemForm';
 import ButtonAppBar from './Components/ButtonAppBar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';

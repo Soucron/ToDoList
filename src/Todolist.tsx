@@ -1,5 +1,5 @@
-import React, {ChangeEvent} from 'react';
-import AddItemForm from './Components/AddItemForm';
+import React, {ChangeEvent, memo, useCallback} from 'react';
+import {AddItemForm} from './Components/AddItemForm';
 import {EditableSpan} from './Components/EditableSpan';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -30,7 +30,7 @@ export type TodoPropsType = {
 export type FilterType = 'All' | 'Active' | 'Completed'
 
 
-export const Todolist = (props: TodoPropsType) => {
+export const Todolist = memo((props: TodoPropsType) => {
 
     // const [title, setTitle] = useState('')
     // const [error, setError] = useState<string | null>(null)
@@ -67,13 +67,13 @@ export const Todolist = (props: TodoPropsType) => {
     }
 
 
-    const changeFilterHandler = (value: FilterType) => {
+    const changeFilterHandler = useCallback((value: FilterType) => {
         props.changeFilter(props.todolistId, value)
-    }
+    }, [props.todolistId])
 
-    const addTaskHandler = (newTitle: string) => {
+    const addTaskHandler = useCallback((newTitle: string) => {
         props.addTask(props.todolistId, newTitle)
-    }
+    }, [props.addTask, props.todolistId])
 
     const updateTaskHandler = (id: string, updateTitle: string) => {
         props.updateTask(props.todolistId, id, updateTitle)
@@ -81,6 +81,15 @@ export const Todolist = (props: TodoPropsType) => {
 
     const updateTodolistTitleHandler = (updateTitle: string) => {
         props.updateTodolistTitle(props.todolistId, updateTitle)
+    }
+
+
+    let tasks = props.tasks
+    if (props.filter === 'Active') {
+        tasks = tasks.filter(t => !t.isDone)
+    }
+    if (props.filter === 'Completed') {
+        tasks = tasks.filter(t => t.isDone)
     }
 
 
@@ -112,7 +121,7 @@ export const Todolist = (props: TodoPropsType) => {
 
 
             <ul>
-                {props.tasks.map(t => {
+                {tasks.map(t => {
                         // const removeTaskHandler =() => {
                         //     props.removeTask(t.id)
                         // }
@@ -137,16 +146,37 @@ export const Todolist = (props: TodoPropsType) => {
                 )}
             </ul>
             <div>
-                <Button variant={props.filter === 'All' ? 'contained' : 'outlined'} color="success"
-                        onClick={() => changeFilterHandler('All')}>All
-                </Button>
-                <Button variant={props.filter === 'Active' ? 'contained' : 'outlined'} color="secondary"
-                        onClick={() => changeFilterHandler('Active')}>Active
-                </Button>
-                <Button variant={props.filter === 'Completed' ? 'contained' : 'outlined'} color="error"
-                        onClick={() => changeFilterHandler('Completed')}>Completed
-                </Button>
+                <ButtonWithMemo
+                    variant={props.filter === 'All' ? 'contained' : 'outlined'}
+                    onClick={() => changeFilterHandler('All')}
+                    color={'success'}
+                    title={'All'}/>
+                <ButtonWithMemo
+                    variant={props.filter === 'Active' ? 'contained' : 'outlined'}
+                    onClick={() => changeFilterHandler('Active')}
+                    color={'secondary'}
+                    title={'Active'}/>
+                <ButtonWithMemo
+                    variant={props.filter === 'Completed' ? 'contained' : 'outlined'}
+                    onClick={() => changeFilterHandler('Completed')}
+                    color={'error'}
+                    title={'Completed'}/>
+
+
             </div>
         </div>
     )
+})
+type ButtonWithMemoPropsType = {
+    title: string,
+    color: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
+    variant: 'text' | 'outlined' | 'contained',
+    onClick: () => void
 }
+
+const ButtonWithMemo = memo((props: ButtonWithMemoPropsType) => {
+    return <Button variant={props.variant}
+                   color={props.color}
+                   onClick={props.onClick}>{props.title}
+    </Button>
+})

@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEventHandler, useState} from 'react';
+import React, {ChangeEvent, KeyboardEventHandler, memo, useState} from 'react';
 import {v1} from 'uuid';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -7,7 +7,7 @@ type AddItemFormPropsType = {
     callBack: ( title: string) => void,
 }
 
-const AddItemForm = (props: AddItemFormPropsType) => {
+export  const AddItemForm =  memo((props: AddItemFormPropsType) => {
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -27,7 +27,7 @@ const AddItemForm = (props: AddItemFormPropsType) => {
     }
 
     const onKeyPressHandler: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
-        setError(null)
+        if (error) setError(null);
         if (e.key === 'Enter') {
             addItem()
         }
@@ -70,6 +70,4 @@ const AddItemForm = (props: AddItemFormPropsType) => {
             {/*{error && <div className="error-message">{error}</div>}*/}
         </div>
     );
-};
-
-export default AddItemForm;
+});
