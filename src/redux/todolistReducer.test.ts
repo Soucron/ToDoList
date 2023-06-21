@@ -12,7 +12,7 @@ beforeEach(() => {
      todolistId1 = v1()
      todolistId2 = v1()
 
-    const startState: Array<TodoListsType> = [
+    startState = [
         {id: todolistId1, title: 'What to learn', filter: 'All'},
         {id: todolistId2, title: 'What to buy', filter: 'All'}
     ]
