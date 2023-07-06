@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import axios from 'axios';
-import {todolistAPI} from '../api/todolist-api';
+// import axios from 'axios';
+import {ResponseType, todolistAPI, todolistType} from '../api/todolist-api';
 
 export default {
-    title: 'API'
+    title: 'Todolist API'
 }
 
 const settings = {
@@ -13,9 +13,9 @@ const settings = {
     }
 }
 
-const todolistId = "6c57441f-3a89-466e-af54-ac8c0ec64738"
+const todolistId = "b3321670-d1d9-48a5-b98b-59e6d737d895"
 export const GetTodolists = () => {
-    const [state, setState] = useState<any>(null)
+    const [state, setState] = useState<todolistType[] | null>(null)
     useEffect(() => {
         todolistAPI.getTodolist()
             .then((res) => {
@@ -25,11 +25,10 @@ export const GetTodolists = () => {
     return <div>{JSON.stringify(state)}</div>
 }
 export const CreateTodolist = () => {
-    const [state, setState] = useState<any>(null)
+    const [state, setState] = useState<ResponseType<{ D: {item: todolistType }}> | null>(null)
     useEffect(() => {
         todolistAPI.createTodolist('First')
             .then((res) => {
-
                     setState(res.data)
                 })
 
@@ -38,9 +37,8 @@ export const CreateTodolist = () => {
     return <div>{JSON.stringify(state)}</div>
 }
 export const DeleteTodolist = () => {
-    const [state, setState] = useState<any>(null)
+    const [state, setState] = useState<ResponseType<{ D: {} }> | null>(null)
     useEffect(() => {
-
         todolistAPI.deleteTodolist(todolistId)
             .then((res) => {
                 setState(res.data)
@@ -51,9 +49,10 @@ export const DeleteTodolist = () => {
     return <div>{JSON.stringify(state)}</div>
 }
 export const UpdateTodolistTitle = () => {
-    const [state, setState] = useState<any>(null)
+    const [state, setState] = useState<ResponseType<{D: {}}>| null>(null)
     useEffect(() => {
-        todolistAPI.updateTodolist(todolistId, 'SOME NEW TITLE').then((res) => {
+        todolistAPI.updateTodolist(todolistId, 'Third')
+            .then((res) => {
             setState(res.data)
         })
     }, [])

@@ -1,12 +1,34 @@
 import axios from 'axios'
-import {DeleteTodolist} from '../stories/todolists-api.stories';
 
 // const settings = {
 //     withCredentials: true,
 //     headers: {
-//         // Не забываем заменить API-KEY на собственный
+//
 //         'API-KEY': '8785f64a-9272-49cb-9d2b-1b0e4ed880cd',
 //     },
+// }
+
+//export type CreateTodolistResponseType = {
+//     resultCode: number
+//     data: {
+//         item: todolistType
+//     },
+//     messages: string[],
+//     fieldsErrors: string[]
+// }
+
+// export type DeleteTodolistResponseType = {
+//     resultCode: number
+//     messages: string[]
+//     fieldsErrors: string[]
+//     data: {}
+// }
+
+// export type UpdateTodolistResponseType = {
+//     resultCode: number
+//     messages: Array<string>
+//     fieldsErrors: Array<string>
+//     data: {}
 // }
 
 const instance = axios.create({
@@ -18,33 +40,19 @@ const instance = axios.create({
 })
 
 
-type todolistType = {
+export type todolistType = {
     id: string,
     addedDate: string,
     order: number,
     title: string
 }
 
-// type CreateTodolistResponseType = {
-//     resultCode: number
-//     data: {
-//         item: todolistType
-//     },
-//     messages: string[],
-//     fieldsErrors: string[]
-// }
 
-type DeleteTodolistResponseType = {
-    resultCode: number
-    messages: string[]
-    fieldsErrors: string[]
-    data: {}
-}
 
 export type ResponseType<D> = {
     resultCode: number,
     messages: string[],
-    fieldErrors: string[]
+    fieldErrors: string[],
     data: D
 }
 
@@ -53,30 +61,26 @@ export type ResponseType<D> = {
 
 export const todolistAPI = {
     updateTodolist(todolistId: string, title: string) {
-        const promise1 = instance.put<ResponseType<{}>>(
+        return instance.put<ResponseType<{D: {}}>>(
             `todo-lists/${todolistId}`,
-            { title: title },
+            {title: title},
         )
-        return promise1
     },
     deleteTodolist(todolistId: string) {
-        const promise2 = instance.delete<ResponseType<{D: []}>>(
+        return instance.delete<ResponseType<{ D: {} }>>(
             `todo-lists/${todolistId}`,
         )
-        return promise2
     },
     createTodolist(title: string) {
-        const promise3 = instance.post<ResponseType<{ D: todolistType}>>(
+        return instance.post<ResponseType<{ D: {item: todolistType }}>>(
             'todo-lists',
             {title: title},
         )
-        return promise3
     },
     getTodolist() {
-        const promise4 = instance.get<todolistType[]>(
+        return instance.get<todolistType[]>(
             'todo-lists',
         )
-        return promise4
     }
 }
 
