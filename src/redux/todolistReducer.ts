@@ -1,6 +1,7 @@
 import {v1} from 'uuid';
 import {todolistAPI, TodolistResponseType} from '../api/todolist-api';
-import {Dispatch} from 'react';
+import {Dispatch} from 'redux';
+
 
 export type ActionsType = ChangeFilterType | RemoveTodolistType | UpdateTodolistTitleType | AddTodolistType | SetTodolistsType
 
@@ -32,12 +33,7 @@ export type TodolistFullType = TodolistResponseType & {
 }
 const initialState: TodolistFullType[] = []
 
-export const fetchTodolistsThunk = (dispatch: Dispatch<any>) => {
-    todolistAPI.getTodolist()
-        .then((res) => {
-            dispatch(setTodolistsAC(res.data))
-        })
-}
+
 
 
 export const todolistReducer = (state: TodolistFullType[] = initialState, action: ActionsType): TodolistFullType[] => {
@@ -131,3 +127,9 @@ export const setTodolistsAC = (todolists: TodolistResponseType[]) => {
     } as const
 }
 
+export const fetchTodolistsThunk = (dispatch: Dispatch) => {
+    todolistAPI.getTodolist()
+        .then((res) => {
+            dispatch(setTodolistsAC(res.data))
+        })
+}

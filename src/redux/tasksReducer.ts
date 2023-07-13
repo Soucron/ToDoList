@@ -15,7 +15,7 @@ export type UpdateTaskACType = ReturnType<typeof updateTaskTitleAC>
 export type SetTasksInTodolistType = {
     type: 'SET-TODOLISTS',
     payload: {
-        Id: number,
+        id: string,
         todolists: TodolistResponseType[]
 
     }
@@ -124,12 +124,12 @@ export const updateTaskTitleAC = (todolistId: string, taskId: string, updateTitl
     } as const
 }
 
-export const setTasksInTodolistAC = (todolists: TodolistResponseType[], Id: number) => {
+export const setTasksInTodolistAC = (todolists: TodolistResponseType[], id: string) => {
     return {
         type: 'SET-TODOLISTS',
         payload: {
             todolists,
-            Id
+            id
         }
     } as const
 }
