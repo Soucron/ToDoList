@@ -1,6 +1,6 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
-import {FilterType, Todolist} from './Todolist';
+import {Todolist} from './Todolist';
 import {AddItemForm} from './Components/AddItemForm';
 import ButtonAppBar from './Components/ButtonAppBar';
 import Container from '@mui/material/Container';
@@ -9,26 +9,34 @@ import Paper from '@mui/material/Paper';
 import {
     addTaskAC,
     changeTaskStatusAC,
-    removeTaskAC,
+    removeTaskAC, TasksType,
     updateTaskTitleAC
 } from './redux/tasksReducer';
 import {
     addTodolistAC,
-    changeFilterAC,
-    removeTodolistAC,
+    changeFilterAC, FilterValuesType,
+    removeTodolistAC, setTodolistsAC, TodolistFullType,
     updateTodolistTitleAC
 } from './redux/todolistReducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './redux/store';
-import {TasksType} from './App';
+import {todolistAPI} from './api/todolist-api';
 
 
-export type  TodoListsType = { id: string, title: string, filter: FilterType }
 
 
 export function AppWithRedux() {
 
-    let todolist = useSelector<AppRootStateType, TodoListsType[]>(state => state.todolist)
+
+    useEffect( () => {
+        todolistAPI.getTodolist().then((res) => {
+            let todos = res.data
+            dispatch(setTodolistsAC(todos))
+        })
+    }, [])
+
+
+    let todolist = useSelector<AppRootStateType, TodolistFullType[]>(state => state.todolist)
     let tasks = useSelector<AppRootStateType, TasksType>(state => state.tasks)
     const dispatch = useDispatch()
 
@@ -49,7 +57,7 @@ export function AppWithRedux() {
         dispatch(updateTaskTitleAC(todolistId, taskId, updateTitle)), [dispatch])
 
 
-    const changeFilter = useCallback((todolistId: string, filter: FilterType) =>
+    const changeFilter = useCallback((todolistId: string, filter: FilterValuesType) =>
         dispatch(changeFilterAC(todolistId, filter)), [dispatch])
 
 

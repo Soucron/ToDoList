@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 // import axios from 'axios';
-import {ResponseType, todolistAPI, todolistType} from '../api/todolist-api';
+import {ResponseType, todolistAPI, TodolistResponseType} from '../api/todolist-api';
 
 export default {
     title: 'Todolist API'
@@ -15,7 +15,7 @@ const settings = {
 
 const todolistId = "b3321670-d1d9-48a5-b98b-59e6d737d895"
 export const GetTodolists = () => {
-    const [state, setState] = useState<todolistType[] | null>(null)
+    const [state, setState] = useState<TodolistResponseType[] | null>(null)
     useEffect(() => {
         todolistAPI.getTodolist()
             .then((res) => {
@@ -25,7 +25,7 @@ export const GetTodolists = () => {
     return <div>{JSON.stringify(state)}</div>
 }
 export const CreateTodolist = () => {
-    const [state, setState] = useState<ResponseType<{ D: {item: todolistType }}> | null>(null)
+    const [state, setState] = useState<ResponseType<{ D: {item: TodolistResponseType }}> | null>(null)
     useEffect(() => {
         todolistAPI.createTodolist('First')
             .then((res) => {

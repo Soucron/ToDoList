@@ -1,12 +1,12 @@
-import React, {ChangeEvent, memo, useCallback} from 'react';
+import React, {memo, useCallback} from 'react';
 import {AddItemForm} from './Components/AddItemForm';
 import {EditableSpan} from './Components/EditableSpan';
 import Button, {ButtonProps, ButtonTypeMap} from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete'
 import IconButton from '@mui/material/IconButton';
-import {SuperCheckBox} from './Components/SuperCheckBox';
-import {Task} from './Task';
+
 import {TaskWithRedux} from './TaskWithRedux';
+import {FilterValuesType} from './redux/todolistReducer';
 
 
 export type TaskPropsType = {
@@ -20,44 +20,20 @@ export type TodoPropsType = {
     title: string
     tasks: TaskPropsType[]
     removeTask: (todolistId: string, taskId: string) => void
-    changeFilter: (todolistId: string, value: FilterType) => void
+    changeFilter: (todolistId: string, value: FilterValuesType) => void
     addTask: (todolistId: string, title: string) => void
     changeTaskStatus: (todolistId: string, id: string, isDone: boolean) => void
     removeTodolist: (todolistId: string) => void
-    filter: FilterType
+    filter: FilterValuesType
     updateTask: (todolistId: string, id: string, updateTitle: string) => void
     updateTodolistTitle: (todolistId: string, updateTitle: string) => void
 }
 
-export type FilterType = 'All' | 'Active' | 'Completed'
 
 
 export const Todolist = memo((props: TodoPropsType) => {
 
-    // const [title, setTitle] = useState('')
-    // const [error, setError] = useState<string | null>(null)
 
-
-    // const addTaskHandler = () => {
-    //     if (title.trim() !== '') {
-    //         props.addTask(props.todolistId, title.trim())
-    //         setTitle('')
-    //     } else {
-    //         setError('Title is required')
-    //     }
-    // }
-
-    // const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    //     setTitle(e.currentTarget.value)
-    // }
-
-    // const onKeyPressHandler: React.KeyboardEventHandler = (e ) => {
-    //     setError(null)
-    //     if (e.key === 'Enter') {
-    //         addTaskHandler()
-    //     }
-    //
-    // }
 
 
 
@@ -67,7 +43,7 @@ export const Todolist = memo((props: TodoPropsType) => {
     }
 
 
-    const changeFilterHandler = useCallback((value: FilterType) => {
+    const changeFilterHandler = useCallback((value: FilterValuesType) => {
         props.changeFilter(props.todolistId, value)
     }, [props.todolistId])
 
@@ -85,10 +61,10 @@ export const Todolist = memo((props: TodoPropsType) => {
     //tasks
 
     let tasks = props.tasks
-    if (props.filter === 'Active') {
+    if (props.filter === 'active') {
         tasks = tasks.filter(t => !t.isDone)
     }
-    if (props.filter === 'Completed') {
+    if (props.filter === 'completed') {
         tasks = tasks.filter(t => t.isDone)
     }
 
@@ -149,18 +125,18 @@ export const Todolist = memo((props: TodoPropsType) => {
             </ul>
             <div>
                 <ButtonWithMemo
-                    variant={props.filter === 'All' ? 'contained' : 'outlined'}
-                    onClick={() => changeFilterHandler('All')}
+                    variant={props.filter === 'all' ? 'contained' : 'outlined'}
+                    onClick={() => changeFilterHandler('all')}
                     color={'success'}
                     title={'All'}/>
                 <ButtonWithMemo
-                    variant={props.filter === 'Active' ? 'contained' : 'outlined'}
-                    onClick={() => changeFilterHandler('Active')}
+                    variant={props.filter === 'active' ? 'contained' : 'outlined'}
+                    onClick={() => changeFilterHandler('active')}
                     color={'secondary'}
                     title={'Active'}/>
                 <ButtonWithMemo
-                    variant={props.filter === 'Completed' ? 'contained' : 'outlined'}
-                    onClick={() => changeFilterHandler('Completed')}
+                    variant={props.filter === 'completed' ? 'contained' : 'outlined'}
+                    onClick={() => changeFilterHandler('completed')}
                     color={'error'}
                     title={'Completed'}/>
 

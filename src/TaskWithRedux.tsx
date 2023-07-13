@@ -3,9 +3,8 @@ import {SuperCheckBox} from './Components/SuperCheckBox';
 import {EditableSpan} from './Components/EditableSpan';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {TaskType} from './App';
 import {useDispatch} from 'react-redux';
-import {changeTaskStatusAC, removeTaskAC, updateTaskTitleAC} from './redux/tasksReducer';
+import {changeTaskStatusAC, removeTaskAC, TaskType, updateTaskTitleAC} from './redux/tasksReducer';
 
 export type TaskPropsType = {
     task: TaskType,

@@ -1,8 +1,8 @@
-import {FilterType} from '../Todolist';
-import {TodoListsType} from '../AppWithReducers';
 import {v1} from 'uuid';
+import {todolistAPI, TodolistResponseType} from '../api/todolist-api';
+import {Dispatch} from 'react';
 
-export type ActionsType = ChangeFilterType | RemoveTodolistType | UpdateTodolistTitleType | AddTodolistType
+export type ActionsType = ChangeFilterType | RemoveTodolistType | UpdateTodolistTitleType | AddTodolistType | SetTodolistsType
 
 export type ChangeFilterType = ReturnType<typeof changeFilterAC>
 
@@ -18,37 +18,72 @@ export type AddTodolistType =  {
     }
 }
 
-const initialState: TodoListsType[] = []
+
+export type SetTodolistsType = {
+    type: 'SET-TODOLISTS',
+    payload: {
+        todolists: TodolistFullType[]
+    }
+}
+
+export type FilterValuesType = 'all' | 'active' | 'completed'
+export type TodolistFullType = TodolistResponseType & {
+    filter: FilterValuesType
+}
+const initialState: TodolistFullType[] = []
+
+export const fetchTodolistsThunk = (dispatch: Dispatch<any>) => {
+    todolistAPI.getTodolist()
+        .then((res) => {
+            dispatch(setTodolistsAC(res.data))
+        })
+}
 
 
-
-export const todolistReducer = (state: TodoListsType[] = initialState, action: ActionsType): TodoListsType[] => {
+export const todolistReducer = (state: TodolistFullType[] = initialState, action: ActionsType): TodolistFullType[] => {
     switch (action.type) {
-        case 'CHANGE-FILTER': {
-            return state.map(todolist => todolist.id === action.payload.todolistId ?
-                {...todolist, filter: action.payload.filter} : todolist)
-        }
         case 'REMOVE-TODOLIST': {
-            return state.filter(todolist => todolist.id !== action.payload.todolistId)
+            return state.filter(tl => tl.id !== action.payload.todolistId)
         }
-        case 'UPDATE-TODOLIST-TITLE' : {
-            return state.map(todolist => todolist.id === action.payload.todolistId ?
-                {...todolist, title: action.payload.updateTitle} : todolist)
+        case 'ADD-TODOLIST': {
+            return [{
+                id: action.payload.newTodolistId,
+                title: action.payload.newTitle,
+                filter: 'all',
+                addedDate: '',
+                order: 0
+            }, ...state]
         }
-        case 'ADD-TODOLIST' : {
-            const newTodoList: TodoListsType = {
-                id: action.payload.newTodolistId, title: action.payload.newTitle, filter: 'All'
-            };
-            return [newTodoList, ...state]
+        case 'UPDATE-TODOLIST-TITLE': {
+            const todolist = state.find(tl => tl.id === action.payload.todolistId);
+            if (todolist) {
+                // если нашёлся - изменим ему заголовок
+                todolist.title = action.payload.updateTitle;
+            }
+            return [...state]
+        }
+        case 'CHANGE-FILTER': {
+            const todolist = state.find(tl => tl.id === action.payload.todolistId);
+            if (todolist) {
+                // если нашёлся - изменим ему заголовок
+                todolist.filter = action.payload.filter;
+            }
+            return [...state]
+        }
+        case 'SET-TODOLISTS': {
+            return action.payload.todolists.map(tl => ({
+                ...tl, filter: 'all'
+            }))
         }
         default:
-            return state
+            return state;
     }
 }
 
 
 
-export const changeFilterAC = (todolistId: string, filter: FilterType) => {
+
+export const changeFilterAC = (todolistId: string, filter: FilterValuesType) => {
     return {
         type: 'CHANGE-FILTER',
         payload: {
@@ -83,6 +118,15 @@ export const addTodolistAC = ( newTitle: string): AddTodolistType => {
         payload: {
             newTodolistId: v1(),
             newTitle
+        }
+    } as const
+}
+
+export const setTodolistsAC = (todolists: TodolistResponseType[]) => {
+    return {
+        type: 'SET-TODOLISTS',
+        payload: {
+            todolists
         }
     } as const
 }
