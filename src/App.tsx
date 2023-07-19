@@ -24,6 +24,9 @@ import {addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC} from './
 import {useSelector} from 'react-redux';
 import {AppRootStateType, useAppDispatch} from './state/store';
 import {TaskStatuses, TaskType} from './api/todolists-api'
+import {LinearProgress} from '@mui/material';
+import {RequestStatusType} from './state/app-reducer';
+import {ErrorSnackbar} from './ErrorSnackbar';
 
 
 export type TasksStateType = {
@@ -34,6 +37,8 @@ export type TasksStateType = {
 function App() {
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const status = useSelector<AppRootStateType, RequestStatusType >(state => state.app.status)
+
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -82,6 +87,7 @@ function App() {
 
     return (
         <div className="App">
+            <ErrorSnackbar />
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
@@ -92,10 +98,11 @@ function App() {
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
+                {status === 'loading' && <LinearProgress/>}
             </AppBar>
             <Container fixed>
                 <Grid container style={{padding: '20px'}}>
-                    <AddItemForm addItem={addTodolist}/>
+                    <AddItemForm addItem={addTodolist} />
                 </Grid>
                 <Grid container spacing={3}>
                     {
@@ -110,6 +117,7 @@ function App() {
                                         tasks={allTodolistTasks}
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}
+                                        entityStatus={tl.entityStatus}
                                         addTask={addTask}
                                         changeTaskStatus={changeStatus}
                                         filter={tl.filter}
