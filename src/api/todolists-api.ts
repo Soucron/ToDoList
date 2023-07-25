@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from 'axios'
+import {tablePaginationClasses} from '@mui/material';
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
     withCredentials: true,
     headers: {
-        'API-KEY': '5fc11a34-7258-4926-8c00-91db4f940cfd'
+        'API-KEY': '8785f64a-9272-49cb-9d2b-1b0e4ed880cd'
     }
 })
 
@@ -36,7 +37,26 @@ export const todolistsAPI = {
     }
 }
 
+export const authAPI = {
+    login(data: LoginType) {
+        return instance.post<ResponseType<{ item: TodolistType }>, AxiosResponse<ResponseType<{ item: TodolistType }>>, LoginType>('auth/login', data);
+    },
+    me() {
+        return instance.get<ResponseType<{data: UserDate}>>('auth/me')
+    },
+    logOut() {
+        return instance.delete<ResponseType>('auth/login')
+    }
+}
+
+
 // types
+type UserDate = {
+    id: number,
+    email: string,
+    login: string
+}
+
 export type TodolistType = {
     id: string
     title: string
@@ -91,3 +111,19 @@ type GetTasksResponse = {
     totalCount: number
     items: TaskType[]
 }
+
+export type LoginType = {
+        email: string
+        password: string
+        rememberMe?: boolean
+}
+
+type LoginResponse = {
+    resultCode: number,
+    messages: string[],
+    data: {
+        userId: number
+    }
+}
+
+
