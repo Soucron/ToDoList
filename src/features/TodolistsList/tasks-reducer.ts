@@ -68,21 +68,20 @@ const slice = createSlice({
 
 });
 
-// actions
 
-// thunks
 
-const fetchTasks = createAsyncThunk("tasks/fetchTasks", async (todolistId: string, thunkAPI) => {
+const fetchTasks = createAsyncThunk<{tasks: TaskType[], todolistId: string}, string>(
+  "tasks/fetchTasks", async (todolistId, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   try {
     dispatch(appActions.setAppStatus({ status: "loading" }));
     const res = await todolistsAPI.getTasks(todolistId);
     const tasks = res.data.items;
     dispatch(appActions.setAppStatus({ status: "succeeded" }));
-    return   { tasks: tasks, todolistId: todolistId };
+    return   { tasks, todolistId };
   } catch (error: any) {
     handleServerNetworkError(error, dispatch)
-    return rejectWithValue('error')
+    return rejectWithValue(null)
   }
 });
 
