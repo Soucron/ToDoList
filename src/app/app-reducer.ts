@@ -1,8 +1,9 @@
 import { Dispatch } from "redux";
-import { authAPI } from "../api/todolists-api";
-import { authActions } from "../features/Login/auth-reducer";
+
+import { authActions } from "../features/Login/auth.reducer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "./store";
+import { authAPI } from "../features/Login/auth.api";
 
 export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed"
 

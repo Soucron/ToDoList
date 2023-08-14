@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFormik } from 'formik'
 import { useSelector } from 'react-redux'
-import { loginTC } from './auth-reducer'
+import { loginTC } from './auth.reducer'
 import { AppRootStateType } from '../../app/store'
 import { Navigate } from 'react-router-dom'
 import { useAppDispatch } from '../../hooks/useAppDispatch';
@@ -46,8 +46,8 @@ export const Login = () => {
             <form onSubmit={formik.handleSubmit}>
                 <FormControl>
                     <FormLabel>
-                        <p>
-                            To log in get registered <a href={'https://social-network.samuraijs.com/'}
+                            <p>
+                                To log in get registered <a href={'https://social-network.samuraijs.com/'}
                                                         target={'_blank'}>here</a>
                         </p>
                         <p>
