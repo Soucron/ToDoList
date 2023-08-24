@@ -11,11 +11,7 @@ const slice = createSlice({
   initialState: {
     isLoggedIn: false,
   },
-  reducers: {
-    setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
-      state.isLoggedIn = action.payload.isLoggedIn;
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(authThunks.login.fulfilled, (state, action) => {
@@ -23,6 +19,9 @@ const slice = createSlice({
       })
       .addCase(authThunks.logout.fulfilled, (state, action) => {
         state.isLoggedIn = action.payload.isLoggedIn
+      })
+      .addCase(initializeApp.fulfilled, (state,action) => {
+        state.isLoggedIn  = action.payload.isLoggedIn
       })
   }
 });
@@ -69,10 +68,29 @@ const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>("auth/log
   }
 });
 
+const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>("app/initializeApp", async (_, thunkApi) => {
+  const { dispatch, rejectWithValue } = thunkApi;
+  try {
+    const res = await authAPI.me();
+    if (res.data.resultCode === 0) {
+      return { isLoggedIn: true };
+    } else {
+      handleServerNetworkError(res.data, dispatch);
+      return rejectWithValue(null);
+    }
+
+  } catch (e) {
+    handleServerNetworkError(e, dispatch);
+    return rejectWithValue(null);
+  } finally {
+    dispatch(appActions.setAppInitialized({ isInitialized: true }));
+  }
+});
+
 
 
 
 export const authReducer = slice.reducer;
 export const authActions = slice.actions;
 
-export const authThunks = {login, logout}
+export const authThunks = {login, logout, initializeApp}
