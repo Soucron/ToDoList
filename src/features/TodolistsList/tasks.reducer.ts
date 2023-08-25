@@ -7,7 +7,6 @@ import {
   UpdateTaskArgType,
   UpdateTaskModelType
 } from "api/todolists-api";
-import { AppThunk } from "app/store";
 import {  handleServerNetworkError } from "utils/error-utils";
 import { appActions } from "app/app.reducer";
 import { todolistsActions, todolistsThunks } from "features/TodolistsList/todolists.reducer";
